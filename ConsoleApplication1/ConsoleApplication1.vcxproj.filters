@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\AppUserInterFace">
+      <UniqueIdentifier>{e8fe81b6-de36-4e1f-9c60-bcfb41429f30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\MachineLayer">
+      <UniqueIdentifier>{a898cfe1-46a4-4306-a49f-6742660b4f01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\CpuLayer">
+      <UniqueIdentifier>{8fd7bd24-cc34-40c6-865c-7a6abc689262}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="clsConsoleUI.h">
+      <Filter>Header Files\AppUserInterFace</Filter>
+    </ClInclude>
+    <ClInclude Include="clsInputValidate.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VoleMechine.h">
+      <Filter>Header Files\MachineLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="clsCommonTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory.h">
+      <Filter>Header Files\MachineLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="RegesterFile.h">
+      <Filter>Header Files\MachineLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Cpu.h">
+      <Filter>Header Files\CpuLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Decoder.h">
+      <Filter>Header Files\CpuLayer</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
