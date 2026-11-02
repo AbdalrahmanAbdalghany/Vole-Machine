@@ -21,7 +21,7 @@ public:
 	{
 		//write the logic that resets the register
 	}
-	static void PrintSnapShot()
+	static void SnapShot()
 	{
 		//write the logic to print all regester it table
 	}

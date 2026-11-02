@@ -79,6 +79,10 @@ private:
     {
         VoleMechine::SnapShot();
     }
+    static void Run()
+    {
+
+    }
     static void _PerfromMainMenueOption(eUserInput MainMenueOption)
     {
         switch (MainMenueOption)
