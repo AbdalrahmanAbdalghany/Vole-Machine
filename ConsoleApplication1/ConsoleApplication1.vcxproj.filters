@@ -53,5 +53,11 @@
     <ClInclude Include="Decoder.h">
       <Filter>Header Files\CpuLayer</Filter>
     </ClInclude>
+    <ClInclude Include="Instructions.h">
+      <Filter>Header Files\CpuLayer</Filter>
+    </ClInclude>
+    <ClInclude Include="Instruction validator.h">
+      <Filter>Header Files\CpuLayer</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
