@@ -4,6 +4,7 @@
 #include"clsInputValidate.h"
 #include"VoleMechine.h"
 #include "clsCommonTypes.h"
+#include "Cpu.h"
 using namespace std;
 class clsConsoleUI
 {
@@ -20,8 +21,8 @@ private:
     
     static short _ReadMainMenueOption()
     {
-        cout << setw(37) << left << "" << "Choose the filter you want ? [1 to 5]? ";
-        short Choice = clsInputValidate::ReadShortNumberBetween(1, 5, "Enter Number between 1 to 5? ");
+        cout << setw(37) << left << "" << "Choose the filter you want ? [1 to 6]? ";
+        short Choice = clsInputValidate::ReadShortNumberBetween(1, 6, "Enter Number between 1 to 6? ");
         return Choice;
     }
     static  void _GoBackToMainMenue()
@@ -31,6 +32,8 @@ private:
         system("pause>0");
         ShowMainScreen();
     }
+
+private:
     static string _ReadPath()
     {
         cout << "Enter Program Path" << endl;
@@ -81,7 +84,21 @@ private:
     }
     static void Run()
     {
+        bool ValidAddress = false;
+        int PCStartingAddress;
+        do {
+			// Take starting address input from the user
+			cout << "Enter the starting address (2-digit hexadecimal): ";
+            cin >> hex >> PCStartingAddress;
 
+            if (PCStartingAddress >= 0 && PCStartingAddress <= 0xFF) {
+                ValidAddress = true;
+            }
+            else {
+                cout << "Invalid starting address. Please enter a valid 2-digit hexadecimal address." << endl;
+            }
+        } while (!ValidAddress);
+        CPU::Run(PCStartingAddress);
     }
     static void _PerfromMainMenueOption(eUserInput MainMenueOption)
     {
@@ -113,10 +130,12 @@ private:
             break;
 
         case eUserInput::Run_Program:
+        {
             system("cls");
-
+            Run();
             _GoBackToMainMenue();
             break;
+        }
         case eUserInput::EXIT:
             system("cls");
 
