@@ -148,6 +148,8 @@
     <ClInclude Include="clsInputValidate.h" />
     <ClInclude Include="Cpu.h" />
     <ClInclude Include="Decoder.h" />
+    <ClInclude Include="Instruction validator.h" />
+    <ClInclude Include="Instructions.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="RegesterFile.h" />
     <ClInclude Include="VoleMechine.h" />
