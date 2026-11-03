@@ -10,9 +10,11 @@ private:
 	string memory[256] = {};
 	
 public:
-	static string Read(string Address)
+	static string Read(int Address)
 	{
 		//Write the logic to read information from memory and return it
+		Memory mem;
+		return mem.memory[Address];
 	}
 	static void Write(MemoryEdit Memory)
 	{
