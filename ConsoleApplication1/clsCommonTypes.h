@@ -17,21 +17,24 @@ enum ExecutionMood {
 };
 enum Opcode
 {
-    Load_Memory,
-    Load_Immdiate,
-    Store,
-    Move,
-    Add_intger,
-    Add_Float,
-    OR,
-    And,
-    XOR,
-    Rotate_Right,
-    Jump_Equal_R0,
-    Halt
+    Load_Memory = 1,
+    Load_Immdiate = 2,
+    Store = 3,
+    Move = 4,
+    Add_intger = 5,
+    Add_Float = 6,
+    OR = 7,
+    And = 8,
+    XOR = 9,
+    Rotate_Right = 10,
+    Jump_Equal_R0 = 11,
+    Halt = 12
 };
-struct Enstructions
+
+struct ValidationResult
 {
-    //Write the Variables you want stor the decoder result
+	bool IsValid;
+	string ErrorMessage;
 };
+
 
