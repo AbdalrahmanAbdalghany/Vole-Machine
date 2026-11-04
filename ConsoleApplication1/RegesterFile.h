@@ -2,32 +2,41 @@
 #include<string>
 #include"clsCommonTypes.h"
 #include <vector>
+#include<algorithm>
 using namespace std;
 class RegesterFile
 {
 private:
-	string Regester[16];
+	static string Regester[16];
+	inline static string HEX[16] = { "0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F" };
 public:
 	static string Read(string Index)
 	{
-		//Write the logic that returns the value of this index
-
+		return Regester[stoi(Index)];
 	}
 	static void Write(RegisterEdit Register)
 	{
-		//Write the logic that insert that value into that indax
+		Regester[stoi(Register.Index)] = Register.Value;
 	}
 	static void Reset()
 	{
-		//write the logic that resets the register
+		fill(Regester, Regester + 16, "0000");
 	}
 	static void SnapShot()
 	{
-		//write the logic to print all regester it table
+		for (int i = 0; i < 16; i++)
+		{
+			cout <<"| " << HEX[i] << " :: " << Regester[i]<<" |"<< endl;
+		}
 	}
 	static vector<string> ReturnSnapShot()
 	{
-		//Wtrite the logic that returns the all ragester by vector
+		vector<string> snapshot;
+		for (int i = 0; i < 16; i++)
+		{
+			snapshot.push_back(Regester[i]);
+		}
+		return snapshot;
 	}
 
 };
