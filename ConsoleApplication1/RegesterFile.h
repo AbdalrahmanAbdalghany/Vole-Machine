@@ -11,11 +11,23 @@ private:
 public:
 	static int Read(int Index)
 	{
+		if (Index < 0 || Index >= 16)
+		{
+			return 0;
+		}
+
 		return Regester[Index];
 	}
-	static void Write(RegisterEdit Register)
+	static bool Write(RegisterEdit Register)
 	{
+		if(Register.Index < 0 || Register.Index >=16)
+		{
+			return false;
+		}
+
 		Regester[Register.Index] = Register.Value;
+
+		return true;
 	}
 	static void Reset()
 	{
@@ -25,7 +37,7 @@ public:
 	{
 		for (int i = 0; i < 16; i++)
 		{
-			cout <<"| " << hex << i << " :: " << Regester[i]<<" |"<< endl;
+			cout <<"| " << hex << uppercase << i << " :: " << Regester[i]<<" |"<< endl;
 		}
 	}
 	static vector<string> ReturnSnapShot()
