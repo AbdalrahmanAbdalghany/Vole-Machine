@@ -3,19 +3,35 @@
 #include<string>
 #include"Memory.h"
 #include"clsCommonTypes.h"
+#include <fstream>
 #include"RegesterFile.h"
 using namespace std;
 class VoleMechine
 {
 public:
-	static void PropramLoader(string Path , string StartingAddress)
+	static bool PropramLoader(string Path, string StartingAddress)
 	{
-		//write the logic to load program commands from .txt file,and stor it into array 
-		//sent the Array And Stating Address to
-		// 
-		// 
-		//Memory::LoadByBytes(StartingAddress,Bytes);
+		ifstream inputFile("file.txt");
+
+		if (!inputFile.is_open()) {
+			return false;
+		}
+
+		vector<string> codes; 
+		string fourchars;
+
+		while (getline(inputFile, fourchars)) {
+
+			if (!fourchars.empty() && fourchars.length() == 4) {
+				codes.push_back(fourchars);
+			}
+		}
+
+		inputFile.close();
+
+		return true;
 	}
+
 	static void WriteMemory(MemoryEdit Byte)
 	{
 		Memory::Write(Byte);
