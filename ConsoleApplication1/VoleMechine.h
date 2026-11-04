@@ -11,7 +11,7 @@ class VoleMechine
 public:
 	static bool PropramLoader(string Path, string StartingAddress)
 	{
-		ifstream inputFile("file.txt");
+		ifstream inputFile(Path);
 
 		if (!inputFile.is_open()) {
 			return false;

@@ -7,19 +7,19 @@ using namespace std;
 class RegesterFile
 {
 private:
-	static string Regester[16];
+	static int Regester[16];
 public:
-	static string Read(string Index)
+	static int Read(int Index)
 	{
-		return Regester[stoi(Index)];
+		return Regester[Index];
 	}
 	static void Write(RegisterEdit Register)
 	{
-		Regester[stoi(Register.Index)] = Register.Value;
+		Regester[Register.Index] = Register.Value;
 	}
 	static void Reset()
 	{
-		fill(Regester, Regester + 16, "0000");
+		fill(Regester, Regester + 16, 0);
 	}
 	static void SnapShot()
 	{
@@ -33,7 +33,7 @@ public:
 		vector<string> snapshot;
 		for (int i = 0; i < 16; i++)
 		{
-			snapshot.push_back(Regester[i]);
+			snapshot.push_back(to_string(Regester[i]));
 		}
 		return snapshot;
 	}
