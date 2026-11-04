@@ -1,5 +1,7 @@
 #pragma once
 #include<string>
+#include<cstdint>
+using namespace std;
 
 struct RegisterEdit
 {
@@ -8,7 +10,7 @@ struct RegisterEdit
 };
 struct MemoryEdit
 {
-    string Address;
+    int Address;
     string Value;
 };
 enum ExecutionMood {
