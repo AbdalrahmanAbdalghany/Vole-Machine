@@ -8,7 +8,6 @@ class RegesterFile
 {
 private:
 	static string Regester[16];
-	inline static string HEX[16] = { "0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F" };
 public:
 	static string Read(string Index)
 	{
