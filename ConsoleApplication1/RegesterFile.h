@@ -26,7 +26,7 @@ public:
 	{
 		for (int i = 0; i < 16; i++)
 		{
-			cout <<"| " << HEX[i] << " :: " << Regester[i]<<" |"<< endl;
+			cout <<"| " << hex << i << " :: " << Regester[i]<<" |"<< endl;
 		}
 	}
 	static vector<string> ReturnSnapShot()
