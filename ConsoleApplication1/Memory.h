@@ -54,26 +54,35 @@ public:
 
 	static void SnapShot()
 	{
+    	const int AddressWidth = 12;
+    	const int ValueWidth = 12;
 
-		for (int c = 0; c < 16; ++c)
-		{
-			cout << hex << uppercase << setw(3) << setfill(' ') << c;
-		}
+    // Header
+    	cout << setw(AddressWidth) << "Address"
+         	<< " | "
+         	<< setw(ValueWidth) << "Value"
+         	<< '\n';
 
-		for (int i = 0; i < 256; i += 16)
-		{
-			cout << hex << uppercase << setw(2) << setfill('0') << i << "   | ";
+    // Separator
+    	cout << string(AddressWidth, '-')
+         	<< "-+-"
+         	<< string(ValueWidth, '-')
+         	<< '\n';
 
-			for (int j = 0; j < 16; ++j)
-			{
-				int address = i + j;
-				string val = memory[address];
+    // Print all 256 memory cells
+    	for (int i = 0; i < 256; ++i)
+    	{
+        	string Value = memory[i];
 
-				if (val.empty())
-					cout << setw(3) << setfill(' ') << "--";
-				else
-					cout << setw(3) << setfill(' ') << val;
-			}
+        	if (Value.empty())
+            	Value = "00";
+
+        	cout << setw(AddressWidth) << i
+             	<< " | "
+             	<< setw(ValueWidth) << Value
+            	<< '\n';
+    	}
+}
 
 			cout << dec << "\n";
 		}
