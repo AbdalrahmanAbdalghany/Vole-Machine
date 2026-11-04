@@ -9,25 +9,34 @@ using namespace std;
 class VoleMechine
 {
 public:
-	static bool PropramLoader(string Path, string StartingAddress)
+	static bool PropramLoader(string Path, int StartingAddress)
 	{
-		ifstream inputFile("file.txt");
+		ifstream inputFile(Path);
 
 		if (!inputFile.is_open()) {
 			return false;
 		}
 
-		vector<string> codes; 
-		string fourchars;
+		string line;
 
-		while (getline(inputFile, fourchars)) {
+		vector<string>codes;
 
-			if (!fourchars.empty() && fourchars.length() == 4) {
-				codes.push_back(fourchars);
+		while (getline(inputFile, line)) {
+
+			if (!line.empty() && line[0] != ';') {
+
+				if (line.length() >= 4) {
+
+					string code = line.substr(0, 4);
+
+					codes.push_back(code);
+				}
 			}
 		}
 
 		inputFile.close();
+
+		Memory::LoadByBytes(StartingAddress, codes);
 
 		return true;
 	}

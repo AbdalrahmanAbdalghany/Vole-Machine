@@ -7,25 +7,37 @@ using namespace std;
 class RegesterFile
 {
 private:
-	static string Regester[16];
+	static int Regester[16];
 public:
-	static string Read(string Index)
+	static int Read(int Index)
 	{
-		return Regester[stoi(Index)];
+		if (Index < 0 || Index >= 16)
+		{
+			return 0;
+		}
+
+		return Regester[Index];
 	}
-	static void Write(RegisterEdit Register)
+	static bool Write(RegisterEdit Register)
 	{
-		Regester[stoi(Register.Index)] = Register.Value;
+		if(Register.Index < 0 || Register.Index >=16)
+		{
+			return false;
+		}
+
+		Regester[Register.Index] = Register.Value;
+
+		return true;
 	}
 	static void Reset()
 	{
-		fill(Regester, Regester + 16, "0000");
+		fill(Regester, Regester + 16, 0);
 	}
 	static void SnapShot()
 	{
 		for (int i = 0; i < 16; i++)
 		{
-			cout <<"| " << hex << i << " :: " << Regester[i]<<" |"<< endl;
+			cout <<"| " << hex << uppercase << i << " :: " << Regester[i]<<" |"<< endl;
 		}
 	}
 	static vector<string> ReturnSnapShot()
@@ -33,7 +45,7 @@ public:
 		vector<string> snapshot;
 		for (int i = 0; i < 16; i++)
 		{
-			snapshot.push_back(Regester[i]);
+			snapshot.push_back(to_string(Regester[i]));
 		}
 		return snapshot;
 	}

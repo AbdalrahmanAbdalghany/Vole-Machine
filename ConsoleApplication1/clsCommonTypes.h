@@ -5,8 +5,8 @@ using namespace std;
 
 struct RegisterEdit
 {
-    string Index;
-    string Value;
+    int Index;
+    int Value;
 };
 struct MemoryEdit
 {
