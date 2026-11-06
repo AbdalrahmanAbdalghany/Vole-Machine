@@ -39,22 +39,22 @@ private:
         cout << "Enter Program Path" << endl;
         return clsInputValidate::Readstring();
     }
-    static string _ReadStartingAddress()
+    static int _ReadStartingAddress()
     {
         cout << "Enter stating Address" << endl;
-        return clsInputValidate::Readstring();
+        return clsInputValidate::ReadIntNumber();
     }
     static void _UiLoadProgaram()
     {
         string path =_ReadPath();
-        string StartingAddress = _ReadStartingAddress();
+        int StartingAddress = _ReadStartingAddress();
         VoleMechine::PropramLoader(path, StartingAddress);
     }
     static MemoryEdit ReadMemoryEdit()
     {
         MemoryEdit Memory;
         cout << "Enter the Address you want edit" << endl;
-        Memory.Address = clsInputValidate::Readstring();
+        Memory.Address = clsInputValidate::ReadIntNumber();
         cout << "Enter the value" << endl;
         Memory.Value = clsInputValidate::Readstring();
         return Memory;
@@ -63,9 +63,9 @@ private:
     {
         RegisterEdit Regester;
         cout << "Enter the Address you want edit" << endl;
-        Regester.Index = clsInputValidate::Readstring();
+        Regester.Index = clsInputValidate::ReadIntNumber();
         cout << "Enter the value" << endl;
-        Regester.Value = clsInputValidate::Readstring();
+        Regester.Value = clsInputValidate::ReadIntNumber();
         return Regester;
     }
     static void _UiEditMemory()
