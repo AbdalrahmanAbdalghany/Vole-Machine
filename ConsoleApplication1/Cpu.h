@@ -4,79 +4,67 @@
 #include"RegesterFile.h"
 #include"Memory.h"
 #include"Instructions.h"
-#include"Instruction validator.h"
+#include"clsInputValidate.h"
 #include<string>
 using namespace std;
 class CPU
 {
 private:
-	int startingAddress;
-	string IR;
-	int PC;
-	bool IsHalted;
+	inline static int startingAddress = 0;
+	inline static string IR = "";
+	inline static int PC = 0;
+	inline static int executedInstructionsCount = 0;
+	inline static bool IsHalted = false;
 
 public:
-	void setStartingAddress(int StartingAddress)
+	static void setStartingAddress(int StartingAddress)
 	{
 		startingAddress = StartingAddress;
 	}
 	
-	int getStartingAddress()
+	static int getStartingAddress()
 	{
 		return startingAddress;
 	}
 
-	void SetPC(int StartingAddress)
+	static void SetPC(int StartingAddress)
 	{
 		PC = StartingAddress;
 	}
 
-	void IncrementPC()
+	static void IncrementPC()
 	{
 		PC += 2;
 	}
 
-	int GetPC()
+	static int GetPC()
 	{
 		return PC;
 	}
 
-	void SetIR(int PC)
+	static void SetIR(int PC)
 	{
 		IR = Memory::Read(PC);
 		IR += Memory::Read(PC + 1);
 	}
-	string GetIR()
+	static string GetIR()
 	{
 		return IR;
 	}
 
-	void SetHalted(bool Halted)
+	static void SetHalted(bool Halted)
 	{
 		IsHalted = Halted;
 	}
 
-	bool GetHalted()
+	static bool GetHalted()
 	{
 		return IsHalted;
 	}
 
 
 
-
-	void SetRegester(RegisterEdit Regester)
-	{
-		RegesterFile::Write(Regester);
-	}
-
-	vector<string> GetRegester()
-	{
-		return RegesterFile::ReturnSnapShot();
-	}
-
-
-
-	int ReadExecutionMood()
+	static int ReadExecutionMood()
 	{
 		cout << setw(37) << left << "" << "===========================================\n";
 		cout << setw(37) << left << "" << "\t\t     Choose Execution Mood\n";
@@ -90,35 +78,53 @@ public:
 		return Choice;
 	}
 
+	static void GetScreen() {
+		cout << setw(37) << left << "" << "===========================================\n";
+		cout << setw(37) << left << "" << "\t\t    Status\n";
+		cout << setw(37) << left << "" << "===========================================\n";
+		cout << setw(37) << left << "" << "\t Program Counter : " << hex << uppercase << CPU::GetPC() << endl;
+		cout << setw(37) << left << "" << "\t Number of executed instructions : " << executedInstructionsCount << "\n";
+		cout << setw(37) << left << "" << "\t Status: " << (CPU::GetHalted() ? "Halted" : "Running") << "\n";
+		cout << setw(37) << left << "" << "===========================================\n";
+		cout << setw(37) << left << "" << "===========================================\n";
+		cout << setw(37) << left << "" << "\t\t    Screen\n";
+		cout << setw(37) << left << "" << "===========================================\n";
+		cout << setw(37) << left << "" <<  Memory::Read(255) << "\n";
+		cout << setw(37) << left << "" << "===========================================\n";
+
+	}
+
 
 	
 
 	//run the program from the starting address
 	static void Run(int StartingAddress)
 	{
-
+		CPU::SetHalted(false);
+		CPU::executedInstructionsCount = 0;
+		Memory::Write({ 255, "" }); 
 		//Set the PC to the starting address 
-		CPU cpu;
-		cpu.SetPC(StartingAddress);
-		cpu.setStartingAddress(StartingAddress);
+		CPU::SetPC(StartingAddress);
+		CPU::setStartingAddress(StartingAddress);
 
 		//Read execution mood from user
-		int ExecutionMood = cpu.ReadExecutionMood();
+		int ExecutionMood = CPU::ReadExecutionMood();
 		
-		while (cpu.GetIR() != "C000") {
+		while (!CPU::GetHalted()) {
 
-			cpu.SetIR(cpu.GetPC());
-			cpu.IncrementPC();
+			CPU::SetIR(CPU::GetPC());
+			CPU::IncrementPC();
 
 			// Decode the instruction
-			Instruction instruction(cpu.GetIR());
-			instruction.Decode();
-			instruction.Validate();
-			if (!instruction.Validate().IsValid) {
+			Instruction::Decode();
+			Instruction::Validate();
+
+			// stop execution if the instruction is invalid
+			if (!Instruction::Validate().IsValid) {
 				cout << setw(37) << left << "" << "===========================================\n";
-				cout << setw(37) << left << "" << "\t Number of executed instructions : " << cpu.GetPC() - cpu.getStartingAddress() - 2 << "\n";
+				cout << setw(37) << left << "" << "\t Number of executed instructions : " << executedInstructionsCount << "\n";
 				cout << setw(37) << left << "" << "\t Status: Faulted.\n";
-				cout << setw(37) << left << "" << "\t Error: " << instruction.Validate().ErrorMessage << "\n";
+				cout << setw(37) << left << "" << "\t Error: " << Instruction::Validate().ErrorMessage << "\n";
 				cout << setw(37) << left << "" << "===========================================\n";
 				
 				cout << setw(37) << left << "" << "\n\tPress any key to go back to Main Menue...\n";
@@ -127,8 +133,19 @@ public:
 				break;
 			}
 
+			Instruction::Execute();
+			executedInstructionsCount++;
+
+			if (ExecutionMood == 2 && !CPU::GetHalted()) {
+				CPU::GetScreen();
+				cout << setw(37) << left << "" << "\n\tPress any key to continue...\n";
+				system("pause>0");
+			}
 
 		}
+		CPU::GetScreen();
+		cout << setw(37) << left << "" << "\n\tPress any key to continue...\n";
+		system("pause>0");
 
 	}
 };
