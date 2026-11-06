@@ -77,14 +77,13 @@ public:
         	if (Value.empty())
             	Value = "00";
 
-        	cout << setw(AddressWidth) << i
+        	cout << setw(AddressWidth) << hex  << uppercase << setw(2) << i
              	<< " | "
              	<< setw(ValueWidth) << Value
             	<< '\n';
     	}
-}
 
-			cout << dec << "\n";
-		}
+		cout << dec << "\n";
+
 	}
 };

@@ -7,7 +7,7 @@ using namespace std;
 class RegesterFile
 {
 private:
-	static int Regester[16];
+	inline static int Regester[16] = {};
 public:
 	static int Read(int Index)
 	{
