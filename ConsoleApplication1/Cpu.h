@@ -83,7 +83,8 @@ public:
 		cout << setw(37) << left << "" << "\t\t    Status\n";
 		cout << setw(37) << left << "" << "===========================================\n";
 		cout << setw(37) << left << "" << "\t Program Counter : " << hex << uppercase << CPU::GetPC() << endl;
-		cout << setw(37) << left << "" << "\t Number of executed instructions : " << executedInstructionsCount << "\n";
+		cout << setw(37) << left << "" << "\t Instruction : " << CPU::GetIR() << endl;
+		cout << setw(37) << left << "" << "\t Number of executed instructions : " << dec << executedInstructionsCount << "\n";
 		cout << setw(37) << left << "" << "\t Status: " << (CPU::GetHalted() ? "Halted" : "Running") << "\n";
 		cout << setw(37) << left << "" << "===========================================\n";
 		cout << setw(37) << left << "" << "===========================================\n";
@@ -111,35 +112,38 @@ public:
 		int ExecutionMood = CPU::ReadExecutionMood();
 		
 		while (!CPU::GetHalted()) {
+			try {
+				CPU::SetIR(CPU::GetPC());
+				CPU::IncrementPC();
 
-			CPU::SetIR(CPU::GetPC());
-			CPU::IncrementPC();
+				Instruction::Decode();
+				auto Result = Instruction::Validate();
 
-			// Decode the instruction
-			Instruction::Decode();
-			Instruction::Validate();
+				// Invalid instruction is reported through the same Faulted path
+				// by throwing, so there is only one place that prints the error.
+				if (!Result.IsValid)
+					throw runtime_error(Result.ErrorMessage);
 
-			// stop execution if the instruction is invalid
-			if (!Instruction::Validate().IsValid) {
-				cout << setw(37) << left << "" << "===========================================\n";
-				cout << setw(37) << left << "" << "\t Number of executed instructions : " << executedInstructionsCount << "\n";
-				cout << setw(37) << left << "" << "\t Status: Faulted.\n";
-				cout << setw(37) << left << "" << "\t Error: " << Instruction::Validate().ErrorMessage << "\n";
-				cout << setw(37) << left << "" << "===========================================\n";
-				
-				cout << setw(37) << left << "" << "\n\tPress any key to go back to Main Menue...\n";
+				Instruction::Execute();
+				executedInstructionsCount++;
 
-				system("pause>0");
-				break;
+				if (ExecutionMood == 2 && !CPU::GetHalted()) {
+					CPU::GetScreen();
+					cout << setw(37) << left << "" << "\n\tPress any key to continue...\n";
+					system("pause>0");
+				}
 			}
+			catch (const exception& Error) {
+				cout << setw(37) << left << "" << "===========================================\n";
+				cout << setw(37) << left << "" << "\t Number of executed instructions : " << dec << executedInstructionsCount << "\n";
+				cout << setw(37) << left << "" << "\t Status: Faulted.\n";
+				cout << setw(37) << left << "" << "\t Error: " << Error.what() << "\n";
+				cout << setw(37) << left << "" << "===========================================\n";
 
-			Instruction::Execute();
-			executedInstructionsCount++;
+				// break is required: without it the loop would keep running
+				// with the same bad instruction and never end.
+				break;
 
-			if (ExecutionMood == 2 && !CPU::GetHalted()) {
-				CPU::GetScreen();
-				cout << setw(37) << left << "" << "\n\tPress any key to continue...\n";
-				system("pause>0");
 			}
 
 		}

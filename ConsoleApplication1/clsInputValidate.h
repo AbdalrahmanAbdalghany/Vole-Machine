@@ -85,5 +85,36 @@ public:
 		getline(cin >> ws, S1);
 		return S1;
 	}
+
+	static int _ReadHexAddress(const string& Message)
+	{
+		int Address = 0;
+		bool IsValid = false;
+
+		do {
+			cout << Message;
+
+			string Input = clsInputValidate::Readstring();
+
+			try {
+				size_t AddressLength = 0;
+				
+				Address = stoi(Input, &AddressLength, 16);
+
+				if (AddressLength != Input.size())
+					throw invalid_argument("Extra characters");
+
+				if (Address < 0 || Address > 254)
+					throw out_of_range("Address out of memory range");
+
+				IsValid = true;
+			}
+			catch (const exception&) {
+				cout << "Invalid input, please enter a hex number between 00 and FE.\n";
+			}
+		} while (!IsValid);
+
+		return Address;
+	}
 };
 

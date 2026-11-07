@@ -39,23 +39,24 @@ private:
         cout << "Enter Program Path" << endl;
         return clsInputValidate::Readstring();
     }
-    static int _ReadStartingAddress()
-    {
-        cout << "Enter stating Address" << endl;
-        return clsInputValidate::ReadIntNumber();
-    }
+    
     static void _UiLoadProgaram()
     {
         string path = _ReadPath();
-        int StartingAddress = _ReadStartingAddress();
-
-        if (VoleMechine::PropramLoader(path, StartingAddress))
+        int StartingAddress = clsInputValidate::_ReadHexAddress("Enter address (2-digit hexadecimal): ");
+        
+        try
         {
-            cout << "Program Loaded Successfully\n";
+         
+            if (VoleMechine::PropramLoader(path, StartingAddress))
+                cout << "Program Loaded Successfully\n";
+            else
+                cout << "Failed to Load Program! File Not Found.\n";
         }
-        else
+        catch (const exception& Error)
         {
-            cout << "Failed to Load Program! File Not Found.\n";
+            
+            cout << "Load failed: " << Error.what() << "\n";
         }
     }
     static MemoryEdit ReadMemoryEdit()
@@ -92,20 +93,8 @@ private:
     }
     static void Run()
     {
-        bool ValidAddress = false;
-        int PCStartingAddress;
-        do {
-			// Take starting address input from the user
-			cout << "Enter the starting address (2-digit hexadecimal): ";
-            cin >> hex >> PCStartingAddress;
-
-            if (PCStartingAddress >= 0 && PCStartingAddress <= 0xFF) {
-                ValidAddress = true;
-            }
-            else {
-                cout << "Invalid starting address. Please enter a valid 2-digit hexadecimal address." << endl;
-            }
-        } while (!ValidAddress);
+       
+        int PCStartingAddress = clsInputValidate::_ReadHexAddress("Enter the starting address (2-digit hexadecimal): ");
         CPU::Run(PCStartingAddress);
     }
     static void _PerfromMainMenueOption(eUserInput MainMenueOption)

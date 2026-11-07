@@ -55,7 +55,7 @@ public:
 			a /= 2.0;
 			exponent++;
 		}
-		while (a < .0625 && exponent > 0) {
+		while (a < .5 && exponent > 0) {
 			a *= 2.0;
 			exponent--;
 		}
