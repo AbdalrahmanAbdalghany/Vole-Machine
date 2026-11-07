@@ -3,6 +3,7 @@
 #include"clsCommonTypes.h"
 #include <vector>
 #include<algorithm>
+#include<iomanip>
 using namespace std;
 class RegesterFile
 {
@@ -35,10 +36,18 @@ public:
 	}
 	static void SnapShot()
 	{
+		cout << "+---------+----------------------+\n";
+		cout << "| Address | Value                |\n";
+		cout << "+---------+----------------------+\n";
+
 		for (int i = 0; i < 16; i++)
 		{
-			cout <<"| " << hex << uppercase << i << " :: " << Regester[i]<<" |"<< endl;
+			cout << "|   " << hex << uppercase << setfill('0') << setw(2) << i << "    | ";
+
+			cout << dec << setfill(' ') << setw(20) << left << Regester[i] << " |\n";
 		}
+
+		cout << "+---------+----------------------+\n";
 	}
 	static vector<string> ReturnSnapShot()
 	{

@@ -1,0 +1,14 @@
+; Program 1: test AND / OR / XOR / ROTATE and screen output 
+; Expected screen output: 30 FC CC 0F 
+
+
+2000 ; (addr 00) R0 = 00, because JUMP (B) compares against R0, so R0 must hold zero 
+2105 ; (addr 02) R1 = 05, the loop counter, it starts at 5 and the loop ends when it reaches 0 
+22FF ; (addr 04) R2 = FF (-1 in two's complement), because there is no SUB, so adding -1 decrements 
+31FF ; (addr 06) print R1 to screen, this is the loop body, so each pass shows the current counter 
+5112 ; (addr 08) R1 = R1 + R2, decrement the counter by 1 
+B10E ; (addr 0A) if R1 == R0 (counter reached 0) jump to 0E, exits the loop 
+B006 ; (addr 0C) R0 == R0 is always true, so this works as an unconditional jump back to 06 
+23AA ; (addr 0E) R3 = AA, a marker value, so seeing it proves the loop exited correctly 
+33FF ; (addr 10) print the marker to screen 
+C000 ; (addr 12) halt 

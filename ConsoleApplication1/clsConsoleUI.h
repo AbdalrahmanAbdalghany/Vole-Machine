@@ -46,9 +46,17 @@ private:
     }
     static void _UiLoadProgaram()
     {
-        string path =_ReadPath();
+        string path = _ReadPath();
         int StartingAddress = _ReadStartingAddress();
-        VoleMechine::PropramLoader(path, StartingAddress);
+
+        if (VoleMechine::PropramLoader(path, StartingAddress))
+        {
+            cout << "Program Loaded Successfully\n";
+        }
+        else
+        {
+            cout << "Failed to Load Program! File Not Found.\n";
+        }
     }
     static MemoryEdit ReadMemoryEdit()
     {

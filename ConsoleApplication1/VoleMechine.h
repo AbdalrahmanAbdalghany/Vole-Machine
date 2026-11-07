@@ -4,12 +4,13 @@
 #include"Memory.h"
 #include"clsCommonTypes.h"
 #include <fstream>
+#include <sstream>
 #include"RegesterFile.h"
 using namespace std;
 class VoleMechine
 {
 public:
-	static bool PropramLoader(string Path, int StartingAddress)
+	static bool PropramLoader(string& Path, int& StartingAddress)
 	{
 		ifstream inputFile(Path);
 
@@ -18,18 +19,23 @@ public:
 		}
 
 		string line;
-
-		vector<string>codes;
+		vector<string> codes;
 
 		while (getline(inputFile, line)) {
 
-			if (!line.empty() && line[0] != ';') {
+			size_t commentPos = line.find(';');
 
-				if (line.length() >= 4) {
+			if (commentPos != string::npos) {
+				line = line.substr(0, commentPos);
+			}
 
-					string code = line.substr(0, 4);
+			stringstream ss(line);
 
-					codes.push_back(code);
+			string token;
+
+			while (ss >> token) {
+				for (size_t i = 0; i + 1 < token.length(); i += 2) {
+					codes.push_back(token.substr(i, 2));
 				}
 			}
 		}
