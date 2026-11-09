@@ -703,6 +703,7 @@ public:
         statusPanel = new Panel(IkPulse, "CPU Status", buildStatusBody());
         resultPanel = new Panel(IkResult, "Final Result", buildResultBody());
         QWidget* buttons = buildButtonBar();
+        btnBar = buttons;                                   // [NEW]
 
         auto* g = new QGridLayout;
         g->setSpacing(14);
@@ -713,6 +714,7 @@ public:
         body->addWidget(contentHost, 1);
 
         auto* mid = new QWidget;
+        midCol = mid;                                       // [NEW]
         auto* midL = new QVBoxLayout(mid);
         midL->setContentsMargins(0, 0, 0, 0);
         midL->setSpacing(14);
@@ -750,6 +752,18 @@ public:
             });
         connect(expAnim, &QVariantAnimation::finished, this, [this] { onExpandDone(); });
 
+        // [NEW] ---- editor expand / collapse animation
+        edAnim = new QVariantAnimation(this);
+        edAnim->setDuration(220);
+        edAnim->setEasingCurve(QEasingCurve::OutCubic);
+        connect(edAnim, &QVariantAnimation::valueChanged, this, [this](const QVariant& v) {
+            editorPanel->setMinimumHeight(v.toInt());
+            });
+        connect(edAnim, &QVariantAnimation::finished, this, [this] {
+            if (!edBig) editorPanel->setMinimumHeight(0);   // back to the normal layout
+            });
+        qApp->installEventFilter(this);   // catches every mouse press in the app
+
         grip = new QSizeGrip(this);
         grip->setFixedSize(16, 16);
 
@@ -782,6 +796,19 @@ protected:
         QWidget::resizeEvent(e);
         grip->move(width() - grip->width(), height() - grip->height());
         grip->raise();
+    }
+
+    // [NEW] click inside the editor panel -> tall, click anywhere else -> normal
+    bool eventFilter(QObject* o, QEvent* e) override
+    {
+        if (e->type() == QEvent::MouseButtonPress && o->isWidgetType()) {
+            auto* w = static_cast<QWidget*>(o);
+            if (w->window() == this && w != grip) {      // ignore dialogs and the size grip
+                const bool inside = (w == editorPanel || editorPanel->isAncestorOf(w));
+                setEditorBig(inside);
+            }
+        }
+        return QWidget::eventFilter(o, e);
     }
 
 private:
@@ -844,8 +871,41 @@ private:
     Panel* consolePanel = nullptr, * memPanel = nullptr, * regPanel = nullptr, * statusPanel = nullptr, * resultPanel = nullptr;
     QFrame* editorPanel = nullptr;
 
+    // [NEW] editor expand / collapse (click inside editor = tall, click elsewhere = normal)
+    QVariantAnimation* edAnim = nullptr;
+    bool edBig = false;
+    int edOrigH = 0;
+    QWidget* midCol = nullptr;   // Result + Console column
+    QWidget* btnBar = nullptr;   // Load/Run/Step/Reset/Stop bar
+
     // ------------------------------------------------------------------ helpers
     CodeEditor* curEditor() const { return static_cast<CodeEditor*>(editors->currentWidget()); }
+
+    // [NEW]
+    void setEditorBig(bool big)
+    {
+        if (big == edBig) return;
+        edBig = big;
+        edAnim->stop();
+        const int cur = editorPanel->height();
+
+        int to;
+        if (big) {
+            edOrigH = cur;
+            const int sp = gridLay->spacing();
+            // minimum height the lower part needs (Result+Console + buttons bar)
+            const int lowerMin = midCol->minimumSizeHint().height() + btnBar->sizeHint().height() + sp * 2;
+            to = contentHost->height() / 2;                          // half of the area (change 2 for more/less)
+            to = qMin(to, contentHost->height() - lowerMin);
+            to = qMax(to, cur);
+        }
+        else {
+            to = edOrigH;
+        }
+        edAnim->setStartValue(cur);
+        edAnim->setEndValue(to);
+        edAnim->start();
+    }
 
     int startAddr() const
     {
@@ -969,6 +1029,7 @@ private:
             closeFocus();
             showLogView(0);
             flash(editorPanel);
+            setEditorBig(true);                              // [NEW]
             curEditor()->setFocus();
             });
         connect(navRegs, &QPushButton::clicked, this, [this] {
@@ -1450,6 +1511,7 @@ private:
         sc(QKeySequence(Qt::CTRL | Qt::Key_L), [this] { if (btnLoad->isEnabled()) loadProgram(); });
         sc(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R), [this] { onReset(); });
         sc(QKeySequence(Qt::Key_Escape), [this] {
+            setEditorBig(false);                                         // [NEW]
             if (focusKind >= 0) { closeFocus(); navEditor->setChecked(true); lastNav = navEditor; }
             });
     }
